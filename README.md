@@ -9,10 +9,11 @@ Delete a character
 Replace a character_
 
 How to run:
-npm start -- wordone wordtwo
+npm run start -- wordone wordtwo
 
 You should make the code look and feel better than it is right now.
 Here is a list of points:
+
 - Check current algorithm implementation (no coding needed here)
 - Refactor code (changes could be in anything)
 - Add tests, you can add any testing library as you want
