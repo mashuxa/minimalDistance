@@ -9,7 +9,22 @@ Delete a character
 Replace a character_
 
 How to run:
+
+```bash
 npm run start -- wordone wordtwo
+```
+
+To check run preset:
+
+```bash
+npm run check
+```
+
+or run tests:
+
+```bash
+npm run test
+```
 
 You should make the code look and feel better than it is right now.
 Here is a list of points:

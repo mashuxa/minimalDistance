@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "ts-node minimalDistance.ts",
+    "start": "ts-node index.ts",
     "check": "npm run start -- wordone wordtwo",
     "lint": "eslint . --fix",
     "format": "prettier . --write",
     "test": "jest --coverage",
-    "test:watch": "jest --watch  ./index.test.ts"
+    "test:watch": "jest --watch  src/minimalDistance/minimalDistance.test.ts"
   },
   "author": "",
   "license": "ISC",
