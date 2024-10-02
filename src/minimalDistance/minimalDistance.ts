@@ -1,57 +1,58 @@
 import getDp from "../getDp/getDp";
+import { BLUE, GREEN, PURPLE, YELLOW } from "../colors";
 
 const minimalDistance = (source: string, target: string): number => {
-  const sourceLength = source.length;
   const targetLength = target.length;
-  const dp = Array(sourceLength);
+  const sourceLength = source.length;
+  const dp = Array(targetLength);
 
-  for (let i = 0; i < sourceLength; i++) {
-    dp[i] = Array(targetLength);
+  for (let i = 0; i < targetLength; i++) {
+    dp[i] = Array(sourceLength);
 
-    for (let j = 0; j < targetLength; j++) {
+    for (let j = 0; j < sourceLength; j++) {
       dp[i][j] = Math.min(
         getDp(i - 1, j, dp) + 1,
         getDp(i, j - 1, dp) + 1,
-        getDp(i - 1, j - 1, dp) + (source[i] === target[j] ? 0 : 1),
+        getDp(i - 1, j - 1, dp) + (target[i] === source[j] ? 0 : 1),
       );
     }
   }
 
-  let distance = getDp(sourceLength - 1, targetLength - 1, dp);
+  let distance = getDp(targetLength - 1, sourceLength - 1, dp);
   const savedDistance = distance;
-  let sourceIndex = sourceLength - 1;
   let targetIndex = targetLength - 1;
-  const currentWord = Array.from(target);
+  let sourceIndex = sourceLength - 1;
+  const currentWord = Array.from(source);
 
-  console.log("\x1b[95m%s\x1b[0m", "currentWord", currentWord.join(""));
+  console.log(YELLOW, "currentWord", currentWord.join(""));
 
   while (distance > 0) {
-    const del = getDp(sourceIndex, targetIndex - 1, dp);
-    const insert = getDp(sourceIndex - 1, targetIndex, dp);
-    const replace = getDp(sourceIndex - 1, targetIndex - 1, dp);
+    const del = getDp(targetIndex, sourceIndex - 1, dp);
+    const insert = getDp(targetIndex - 1, sourceIndex, dp);
+    const replace = getDp(targetIndex - 1, sourceIndex - 1, dp);
 
     if (replace < distance) {
-      currentWord[targetIndex] = source[sourceIndex];
-      sourceIndex = sourceIndex - 1;
+      currentWord[sourceIndex] = target[targetIndex];
       targetIndex = targetIndex - 1;
+      sourceIndex = sourceIndex - 1;
       distance = replace;
 
-      console.log("\x1b[32m%s\x1b[0m", "replace", currentWord.join(""));
+      console.log(GREEN, "replace", currentWord.join(""));
     } else if (del < distance) {
-      currentWord[targetIndex] = "";
-      targetIndex = targetIndex - 1;
+      currentWord[sourceIndex] = "";
+      sourceIndex = sourceIndex - 1;
       distance = del;
 
-      console.log("\x1b[34m%s\x1b[0m", "delete", currentWord.join(""));
+      console.log(PURPLE, "delete", currentWord.join(""));
     } else if (insert < distance) {
-      currentWord.splice(targetIndex + 1, 0, source[sourceIndex]);
-      sourceIndex = sourceIndex - 1;
+      currentWord.splice(sourceIndex + 1, 0, target[targetIndex]);
+      targetIndex = targetIndex - 1;
       distance = insert;
 
-      console.log("\x1b[33m%s\x1b[0m", "insert", currentWord.join(""));
+      console.log(BLUE, "insert", currentWord.join(""));
     } else {
-      sourceIndex = sourceIndex - 1;
       targetIndex = targetIndex - 1;
+      sourceIndex = sourceIndex - 1;
     }
   }
 

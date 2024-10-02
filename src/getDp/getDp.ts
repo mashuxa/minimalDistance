@@ -1,9 +1,9 @@
-const getDp = (i: number, j: number, dp: number[][]): number => {
-  if (i < 0 && j < 0) return 0;
-  if (i < 0) return j + 1;
-  if (j < 0) return i + 1;
+const getDp = (targetIndex: number, sourceIndex: number, dp: number[][]): number => {
+  if (targetIndex < 0 && sourceIndex < 0) return 0;
+  if (targetIndex < 0) return sourceIndex + 1;
+  if (sourceIndex < 0) return targetIndex + 1;
 
-  return dp[i][j];
+  return dp[targetIndex][sourceIndex];
 };
 
 export default getDp;
