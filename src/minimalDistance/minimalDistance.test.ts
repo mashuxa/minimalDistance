@@ -42,7 +42,7 @@ describe("minimalDistance", () => {
   it("should show messages with correct color, operation, result", async () => {
     minimalDistance("wordone", "wordtwo");
 
-    expect(consoleSpy).toHaveBeenNthCalledWith(1, YELLOW, "currentWord", "wordone");
+    expect(consoleSpy).toHaveBeenNthCalledWith(1, YELLOW, "convertibleWordArr", "wordone");
     expect(consoleSpy).toHaveBeenNthCalledWith(2, GREEN, "replace", "wordono");
     expect(consoleSpy).toHaveBeenNthCalledWith(3, GREEN, "replace", "wordowo");
     expect(consoleSpy).toHaveBeenNthCalledWith(4, GREEN, "replace", "wordtwo");

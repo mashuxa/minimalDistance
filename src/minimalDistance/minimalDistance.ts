@@ -6,14 +6,14 @@ const minimalDistance = (source: string, target: string): number => {
   const sourceLength = source.length;
   const dp = Array(targetLength);
 
-  for (let i = 0; i < targetLength; i++) {
-    dp[i] = Array(sourceLength);
+  for (let t = 0; t < targetLength; t++) {
+    dp[t] = Array(sourceLength);
 
-    for (let j = 0; j < sourceLength; j++) {
-      dp[i][j] = Math.min(
-        getDp(i - 1, j, dp) + 1,
-        getDp(i, j - 1, dp) + 1,
-        getDp(i - 1, j - 1, dp) + (target[i] === source[j] ? 0 : 1),
+    for (let s = 0; s < sourceLength; s++) {
+      dp[t][s] = Math.min(
+        getDp(t - 1, s, dp) + 1, // insert
+        getDp(t, s - 1, dp) + 1, // delete
+        getDp(t - 1, s - 1, dp) + (target[t] === source[s] ? 0 : 1), //replace
       );
     }
   }
@@ -22,9 +22,9 @@ const minimalDistance = (source: string, target: string): number => {
   const savedDistance = distance;
   let targetIndex = targetLength - 1;
   let sourceIndex = sourceLength - 1;
-  const currentWord = Array.from(source);
+  const convertibleWordArr = [...source];
 
-  console.log(YELLOW, "currentWord", currentWord.join(""));
+  console.log(YELLOW, "convertibleWordArr", convertibleWordArr.join(""));
 
   while (distance > 0) {
     const del = getDp(targetIndex, sourceIndex - 1, dp);
@@ -32,24 +32,24 @@ const minimalDistance = (source: string, target: string): number => {
     const replace = getDp(targetIndex - 1, sourceIndex - 1, dp);
 
     if (replace < distance) {
-      currentWord[sourceIndex] = target[targetIndex];
+      convertibleWordArr[sourceIndex] = target[targetIndex];
       targetIndex = targetIndex - 1;
       sourceIndex = sourceIndex - 1;
       distance = replace;
 
-      console.log(GREEN, "replace", currentWord.join(""));
+      console.log(GREEN, "replace", convertibleWordArr.join(""));
     } else if (del < distance) {
-      currentWord[sourceIndex] = "";
+      convertibleWordArr[sourceIndex] = "";
       sourceIndex = sourceIndex - 1;
       distance = del;
 
-      console.log(PURPLE, "delete", currentWord.join(""));
+      console.log(PURPLE, "delete", convertibleWordArr.join(""));
     } else if (insert < distance) {
-      currentWord.splice(sourceIndex + 1, 0, target[targetIndex]);
+      convertibleWordArr.splice(sourceIndex + 1, 0, target[targetIndex]);
       targetIndex = targetIndex - 1;
       distance = insert;
 
-      console.log(BLUE, "insert", currentWord.join(""));
+      console.log(BLUE, "insert", convertibleWordArr.join(""));
     } else {
       targetIndex = targetIndex - 1;
       sourceIndex = sourceIndex - 1;

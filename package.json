@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start": "ts-node index.ts",
-    "check": "npm run start -- wordone wordtwo",
+    "check": "npm run start -- jssccupzjura mimyoohllzotyxsu",
     "lint": "eslint . --fix",
     "format": "prettier . --write",
     "test": "jest --coverage",
