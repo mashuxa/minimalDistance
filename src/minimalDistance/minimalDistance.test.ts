@@ -32,6 +32,8 @@ describe("minimalDistance", () => {
   });
 
   it("should return minimum number of operations", async () => {
+    expect(minimalDistance("123456789", "")).toEqual(9);
+    expect(minimalDistance("", "123456789")).toEqual(9);
     expect(minimalDistance("1234", "1")).toEqual(3);
     expect(minimalDistance("123", "1")).toEqual(2);
     expect(minimalDistance("12", "1")).toEqual(1);
@@ -42,7 +44,7 @@ describe("minimalDistance", () => {
   it("should show messages with correct color, operation, result", async () => {
     minimalDistance("wordone", "wordtwo");
 
-    expect(consoleSpy).toHaveBeenNthCalledWith(1, YELLOW, "convertibleWordArr", "wordone");
+    expect(consoleSpy).toHaveBeenNthCalledWith(1, YELLOW, "convertibleWord", "wordone");
     expect(consoleSpy).toHaveBeenNthCalledWith(2, GREEN, "replace", "wordono");
     expect(consoleSpy).toHaveBeenNthCalledWith(3, GREEN, "replace", "wordowo");
     expect(consoleSpy).toHaveBeenNthCalledWith(4, GREEN, "replace", "wordtwo");

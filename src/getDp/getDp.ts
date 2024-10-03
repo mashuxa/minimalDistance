@@ -1,6 +1,11 @@
+import { Matrix } from "../types";
+
 export let getDpCallCounter = 0;
 
-export const getDp = (targetIndex: number, sourceIndex: number, dp: number[][]): number => {
+export const getDp = (targetIndex: number, sourceIndex: number, dp: Matrix): number => {
+  //targetIndex -1
+  //sourceIndex -1
+
   getDpCallCounter++;
   // insert  - #2 только для первого цикла t (t=0) [остальное #rest]
   // delete  - #3 только для первого элемента s=0 на каждом цикле t [остальное #rest]

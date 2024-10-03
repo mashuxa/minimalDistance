@@ -1,62 +1,73 @@
-import getDp from "../getDp/getDp";
-import { BLUE, GREEN, PURPLE, YELLOW } from "../colors";
+import getCalculatedValue from "../getCalculatedValue/getCalculatedValue";
+import { deleteFn, insertFn, replaceFn } from "../operations/operations";
+import printOperationResult from "../printOperationResult/printOperationResult";
+import { Matrix, Operation } from "../types";
 
 const minimalDistance = (source: string, target: string): number => {
   const targetLength = target.length;
   const sourceLength = source.length;
-  const dp = Array(targetLength);
+
+  if (!targetLength || !sourceLength) {
+    return Math.abs(targetLength - sourceLength);
+  }
+
+  const dp: Matrix = [];
+  const shouldInsert = targetLength > sourceLength;
+  const shiftFn = shouldInsert ? insertFn : deleteFn;
+  const shiftMatrix: Matrix = [];
+  const replaceMatrix: Matrix = [];
 
   for (let t = 0; t < targetLength; t++) {
-    dp[t] = Array(sourceLength);
+    dp[t] = [];
+    shiftMatrix[t] = [];
+    replaceMatrix[t] = [];
 
     for (let s = 0; s < sourceLength; s++) {
-      dp[t][s] = Math.min(
-        getDp(t - 1, s, dp) + 1, // insert
-        getDp(t, s - 1, dp) + 1, // delete
-        getDp(t - 1, s - 1, dp) + (target[t] === source[s] ? 0 : 1), //replace
-      );
+      shiftMatrix[t][s] = shiftFn(t, s, dp);
+      replaceMatrix[t][s] = replaceFn(t, s, dp);
+      dp[t][s] = Math.min(shiftMatrix[t][s] + 1, replaceMatrix[t][s] + (target[t] === source[s] ? 0 : 1));
     }
   }
 
-  let distance = getDp(targetLength - 1, sourceLength - 1, dp);
-  const savedDistance = distance;
+  let distance = dp[targetLength - 1][sourceLength - 1];
   let targetIndex = targetLength - 1;
   let sourceIndex = sourceLength - 1;
   const convertibleWordArr = [...source];
 
-  console.log(YELLOW, "convertibleWordArr", convertibleWordArr.join(""));
+  printOperationResult(Operation.convertibleWord, convertibleWordArr);
 
   while (distance > 0) {
-    const del = getDp(targetIndex, sourceIndex - 1, dp);
-    const insert = getDp(targetIndex - 1, sourceIndex, dp);
-    const replace = getDp(targetIndex - 1, sourceIndex - 1, dp);
+    const replace = getCalculatedValue(replaceMatrix, targetIndex, sourceIndex);
+    const shift = getCalculatedValue(shiftMatrix, targetIndex, sourceIndex);
 
     if (replace < distance) {
       convertibleWordArr[sourceIndex] = target[targetIndex];
-      targetIndex = targetIndex - 1;
-      sourceIndex = sourceIndex - 1;
+      targetIndex--;
+      sourceIndex--;
       distance = replace;
 
-      console.log(GREEN, "replace", convertibleWordArr.join(""));
-    } else if (del < distance) {
-      convertibleWordArr[sourceIndex] = "";
-      sourceIndex = sourceIndex - 1;
-      distance = del;
+      printOperationResult(Operation.replace, convertibleWordArr);
+    } else if (shift < distance) {
+      if (shouldInsert) {
+        convertibleWordArr.splice(sourceIndex + 1, 0, target[targetIndex]);
+        targetIndex--;
 
-      console.log(PURPLE, "delete", convertibleWordArr.join(""));
-    } else if (insert < distance) {
-      convertibleWordArr.splice(sourceIndex + 1, 0, target[targetIndex]);
-      targetIndex = targetIndex - 1;
-      distance = insert;
+        printOperationResult(Operation.insert, convertibleWordArr);
+      } else {
+        convertibleWordArr[sourceIndex] = "";
+        sourceIndex--;
 
-      console.log(BLUE, "insert", convertibleWordArr.join(""));
+        printOperationResult(Operation.delete, convertibleWordArr);
+      }
+
+      distance = shift;
     } else {
-      targetIndex = targetIndex - 1;
-      sourceIndex = sourceIndex - 1;
+      targetIndex--;
+      sourceIndex--;
     }
   }
 
-  return savedDistance;
+  return dp[targetLength - 1][sourceLength - 1];
 };
 
 export default minimalDistance;
